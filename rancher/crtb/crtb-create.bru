@@ -5,13 +5,13 @@ meta {
 }
 
 post {
-  url: {{URL}}/v1/management.cattle.io.clusterroletemplatebindings
+  url: {{rancherURL}}/v1/management.cattle.io.clusterroletemplatebindings
   body: json
   auth: bearer
 }
 
 auth:bearer {
-  token: {{TOKEN}}
+  token: {{adminToken}}
 }
 
 body:json {
@@ -22,10 +22,6 @@ body:json {
       "namespace": "local"
     },
     "roleTemplateName": "cluster-owner",
-    "userPrincipalName": "local://{{username}}"
+    "userPrincipalName": "local://{{createUserID}}"
   }
-}
-
-vars:pre-request {
-  USER: u-dzdfc
 }

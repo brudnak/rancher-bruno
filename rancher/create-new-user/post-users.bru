@@ -29,8 +29,12 @@ vars:post-response {
 }
 
 script:pre-request {
-  const { v4: uuidv4 } = require('uuid');
-  const shortId = 'bruno-' + uuidv4().split('-')[2].substr(0, 4);
+  const generateShortId = (length = 8) => {
+      const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+      return Array.from({length}, () => chars.charAt(Math.floor(Math.random() * chars.length))).join('');
+  };
+  
+  const shortId = 'bruno-' + generateShortId(8);
   bru.setVar("user", shortId);
 }
 
