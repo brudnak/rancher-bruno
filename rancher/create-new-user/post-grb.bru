@@ -1,0 +1,25 @@
+meta {
+  name: post-grb
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{rancherURL}}/v1/management.cattle.io.globalrolebindings
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "globalRoleName": "user",
+    "metadata": {
+      "generateName": "bruno-"
+    },
+    "userName": "{{createUserID}}"
+  }
+}

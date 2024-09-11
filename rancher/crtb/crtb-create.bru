@@ -1,0 +1,31 @@
+meta {
+  name: crtb-create
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{URL}}/v1/management.cattle.io.clusterroletemplatebindings
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{TOKEN}}
+}
+
+body:json {
+  {
+    "clusterName": "local",
+    "metadata": {
+      "generateName": "bruno-crtb-",
+      "namespace": "local"
+    },
+    "roleTemplateName": "cluster-owner",
+    "userPrincipalName": "local://{{username}}"
+  }
+}
+
+vars:pre-request {
+  USER: u-dzdfc
+}

@@ -1,0 +1,48 @@
+meta {
+  name: post-users
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{rancherURL}}/v3/users
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "type": "user",
+    "enabled": true,
+    "mustChangePassword": false,
+    "password": "{{password}}",
+    "username": "{{user}}"
+  }
+}
+
+vars:post-response {
+  userName: 
+}
+
+script:pre-request {
+  const { v4: uuidv4 } = require('uuid');
+  const shortId = 'bruno-' + uuidv4().split('-')[2].substr(0, 4);
+  bru.setVar("user", shortId);
+}
+
+script:post-response {
+  const lodash = require('lodash');
+  const resBody = res.getBody();
+  let userId = lodash.get(resBody, 'id');
+  bru.setEnvVar('createUserID', userId);
+}
+
+tests {
+  const data = res.getBody();
+  console.log(`user created: ${data.username}`);
+  
+}
