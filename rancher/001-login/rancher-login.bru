@@ -1,0 +1,45 @@
+meta {
+  name: rancher-login
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{rancherURL}}/v3-public/localProviders/local?action=login
+  body: json
+  auth: none
+}
+
+params:query {
+  action: login
+}
+
+body:json {
+  {
+    "description": "UI session",
+    "responseType": "cookie",
+    "username": "admin",
+    "password": "{{password}}"
+  }
+}
+
+script:post-response {
+  const setCookieHeader = res.headers['set-cookie'];
+  if (setCookieHeader) {
+    // The set-cookie header might be an array, so we'll join it into a string
+    const cookieString = Array.isArray(setCookieHeader) ? setCookieHeader.join('; ') : setCookieHeader;
+    
+    // Extract the token from the header
+    const tokenMatch = cookieString.match(/R_SESS=(.*?);/);
+    if (tokenMatch && tokenMatch[1]) {
+      const token = tokenMatch[1];
+      // Set the token as an environment variable
+      bru.setEnvVar('sessToken', token);
+      console.log('Token extracted and set as environment variable: ' + token);
+    } else {
+      console.log('Token not found in the set-cookie header');
+    }
+  } else {
+    console.log('set-cookie header not found in the response');
+  }
+}

@@ -1,0 +1,32 @@
+meta {
+  name: create-admin-token
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{rancherURL}}/v3/tokens
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{sessToken}}
+}
+
+body:json {
+  {
+    "type": "token",
+    "metadata": {},
+    "clusterId": "",
+    "ttl": 7776000000
+  }
+}
+
+script:post-response {
+  const lodash = require('lodash');
+  const resBody = res.getBody();
+  let token = lodash.get(resBody, 'token');
+  bru.setEnvVar('adminToken', token);
+  console.log(`RANCHER ADMIN TOKEN: ${token}`);
+}
