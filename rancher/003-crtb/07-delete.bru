@@ -1,0 +1,15 @@
+meta {
+  name: 07-delete
+  type: http
+  seq: 7
+}
+
+delete {
+  url: {{rancherURL}}/v1/management.cattle.io.clusterroletemplatebindings/local/{{crtbName}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}

@@ -1,7 +1,7 @@
 meta {
-  name: crtb-create
+  name: 04-create
   type: http
-  seq: 1
+  seq: 4
 }
 
 post {
@@ -18,10 +18,17 @@ body:json {
   {
     "clusterName": "local",
     "metadata": {
-      "generateName": "bruno-crtb-",
+      "generateName": "bruno-",
       "namespace": "local"
     },
     "roleTemplateName": "cluster-owner",
     "userPrincipalName": "local://{{createUserID}}"
   }
+}
+
+script:post-response {
+  const lodash = require('lodash');
+  const resBody = res.getBody();
+  let crtbName = lodash.get(resBody, 'metadata.name');
+  bru.setEnvVar('crtbName', crtbName);
 }

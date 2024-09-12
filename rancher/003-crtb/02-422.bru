@@ -1,0 +1,24 @@
+meta {
+  name: 02-422
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{rancherURL}}/v1/management.cattle.io.clusterroletemplatebindings
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "type": "clusterRoleTemplateBinding",
+    "clusterName": "local",
+    "roleTemplateName": "cluster-owner",
+    "userPrincipalName": "local://{{createUserID}}"
+  }
+}

@@ -1,0 +1,22 @@
+meta {
+  name: 05-list
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{rancherURL}}/v1/management.cattle.io.clusterroletemplatebindings/local/{{crtbName}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+script:post-response {
+  const lodash = require('lodash');
+  const resBody = res.getBody();
+  let crtbResVersion = lodash.get(resBody, 'metadata.resourceVersion');
+  bru.setEnvVar('crtbResVersion', crtbResVersion);
+}
